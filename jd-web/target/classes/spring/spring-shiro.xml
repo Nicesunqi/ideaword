@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                     http://www.springframework.org/schema/context
+                     http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+	<description>Shiro Configuration</description>
+	<context:property-placeholder location="classpath:application.properties" />
+	
+	<bean id="sessionManager"
+		class="org.apache.shiro.session.mgt.DefaultSessionManager">
+		<property name="sessionValidationSchedulerEnabled" value="false" />
+		<!-- 设置超时时间 -->
+		<!-- <property name="globalSessionTimeout" value="1800000"/> -->
+	</bean>
+	
+	<!-- 安全认证过滤器 -->
+	<bean id="shiroFilter"
+		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="filters">
+		    <map>
+                <entry key="statelessAuthc">
+                    <bean class="com.graphics.shiro.StatelessAccessControlFilter"/>
+                </entry>
+            </map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+			    <!-- 
+			    	anon 什么事都不做 
+			    -->
+			    ${adminPath}/coding/columns/** = anon
+				/static/** = anon
+				/userfiles/** = anon
+				${adminPath}/system/account/login = anon
+				${adminPath}/system/account/logout = anon
+				${adminPath}/impl/user/login = anon
+				${adminPath}/download/*/** = anon
+				${adminPath}/** = statelessAuthc
+				
+			</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="statelessRealm"
+		class="com.graphics.shiro.StatelessAuthorizingRealm">
+	</bean>
+	<bean id="subjectFactory"
+		class="com.graphics.shiro.StatelessDefaultSubjectFactory">
+	</bean>
+
+	<!-- 定义 Shiro 主要业务对象 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="subjectFactory" ref="subjectFactory" />
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="realm" ref="statelessRealm" />
+		<property name="subjectDAO.sessionStorageEvaluator.sessionStorageEnabled"  value="false"/> 
+	</bean>
+	
+	<bean id="hashedCredentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="md5" />
+		<property name="hashIterations" value="1" />
+	</bean>
+	
+	<!-- 开启shiro aop注解支持 使用代理方式;所以需要开启代码支持; -->
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	<!-- 自动代理所有的advisor,由Advisor决定对哪些类的方法进行AOP代理。 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	
+	
+</beans>
