@@ -1,16 +1,16 @@
-<template>
+<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div>
         <el-row class="layout-page-heading">
             <el-col :span="16">
                 <h3>信息管理</h3>
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item>信息管理</el-breadcrumb-item>
-                    <el-breadcrumb-item>通知公告</el-breadcrumb-item>
+                    <el-breadcrumb-item>公告类型管理</el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
             <el-col :span="8">
                 <div class="layout-page-heading-action">
-                    <el-button v-permission="'permission:studentUser:add'" type="primary" onclick="router.push('add')"><i
+                    <el-button v-permission="'permission:noticeType:add'" type="primary" onclick="router.push('add')"><i
                             class="fa fa-plus"></i>添加
                     </el-button>
                 </div>
@@ -18,7 +18,7 @@
         </el-row>
         <div class="layout-page-box">
             <el-form :inline="true" :model="filters" class="demo-form-inline">
-                <el-form-item label="公告：">
+                <el-form-item label="名称：">
                     <el-input v-model="filters.column.name"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -28,12 +28,12 @@
         </div>
         <div class="layout-page-box">
             <el-table
-                    :data="notices"
+                    :data="notypes"
                     border
                     style="width: 100%">
                 <el-table-column
                         prop="name"
-                        label="姓名"
+                        label="名称"
                         width="100">
                 </el-table-column>
                 <el-table-column
@@ -48,8 +48,8 @@
                         min-width="130px">
                     <template scope="scope">
                         <el-button-group>
-                            <el-button v-permission="'permission:studentUser:edit'" @click="edit(scope.row)" type="primary" size="small"><i class="fa fa-edit"></i>查看</el-button>
-                            <el-button v-permission="'permission:studentUser:del'" @click="del(scope.row)" size="small"><i class="fa fa-remove"></i>删除</el-button>
+                        <el-button v-permission="'permission:noticeType:edit'" @click="edit(scope.row)" type="primary" size="small"><i class="fa fa-edit"></i>查看</el-button>
+                        <el-button v-permission="'permission:noticeType:delete'" @click="del(scope.row)" size="small"><i class="fa fa-remove"></i>删除</el-button>
                         </el-button-group>
                     </template>
                 </el-table-column>
@@ -69,6 +69,7 @@
 <script>
     import permission from '../../../directives/permission/index'
     import api from "../../../assets/js/http";
+    import moment from "moment"
 
     export default {
         directives: {
@@ -85,20 +86,20 @@
                         total: 0
                     },
                 },
-                notices: []
+                notypes: []
             }
         },
         methods: {
             edit(row){
-                router.push({name: 'studentUserEdit', query: {id: row.id}})
+                router.push({name: 'NoticeTypeEdit', query: {id: row.id}})
             },
             del(row){
-                this.$confirm('此操作将删除用户, 是否继续?', '提示', {
+                this.$confirm('此操作将删除此公告, 是否继续?', '提示', {
                     confirmButtonText: '删除',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    api.request('admin/impl/user/delete', {id: row.id}, (res)=> {
+                    api.request('admin/impl/notype/delete', {id: row.id}, (res)=> {
                         _g.toast('success', '删除成功!')
                         this.init()
                     })
@@ -110,14 +111,18 @@
                     path:this.$route.path,
                     query:{name:this.filters.column.name}
                 });
-                api.request("admin/impl/notice/list", this.$route.query, (res) => {
-                    this.notices = res.data.notices;
+                api.request("admin/impl/notype/list", this.$route.query, (res) => {
+                    this.notypes = res.data.notice_type;
                     this.filters.pagination.total = parseInt(res.data.total)
                 })
             },
+            formatTime:function(row,column){
+                var date = new Date(row.birthday);
+                return moment(date).format( 'YYYY-MM-DD');
+            },
             init() {
-                api.request("admin/impl/notice/list", {}, (res) => {
-                    this.notices = res.data.notices;
+                api.request("admin/impl/notype/list", {}, (res) => {
+                    this.notypes = res.data.notice_type;
                     this.filters.pagination.total = parseInt(res.data.total)
                 })
             }

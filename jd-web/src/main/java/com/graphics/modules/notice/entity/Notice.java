@@ -1,4 +1,4 @@
-package com.graphics.modules.user.entity;
+package com.graphics.modules.notice.entity;
 
 import com.graphics.common.persistence.IdEntity;
 
@@ -9,11 +9,13 @@ import java.util.Date;
 
 @Entity
 @Table(name = "class_notice")
-public class StudentNotice extends IdEntity<StudentNotice>{
+public class Notice extends IdEntity<Notice>{
 
     private String title;
     private String content;
     private String status;
+    private String noticeType;
+    private String files;
     private Date lastLoginTime;// 最后登录时间
     private Date lastVisitTime;//最后访问时间
     private String lastLoginIp;// 最近一次登录ip
@@ -37,6 +39,22 @@ public class StudentNotice extends IdEntity<StudentNotice>{
 
     public String getStatus() {
         return status;
+    }
+
+    public String getNoticeType() {
+        return noticeType;
+    }
+
+    public void setNoticeType(String noticeType) {
+        this.noticeType = noticeType;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
     }
 
     public void setStatus(String status) {

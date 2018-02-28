@@ -234,7 +234,7 @@
             }
         },
         created() {
-            this.init()
+            this.init();
             this.initToken();
         }
     }

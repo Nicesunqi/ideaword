@@ -14,7 +14,12 @@ import SystemOffice from '@/components/system/office/list'
 import StudentUser from '@/components/user/stuinfo/list'
 import StudentUserEdit from '@/components/user/stuinfo/edit'
 import StudentUserAdd from '@/components/user/stuinfo/add'
-import StudentNotice from '@/components/user/notice/list'
+import Notice from '@/components/user/notice/list'
+import NoticeAdd from '@/components/user/notice/add'
+
+import NoticeType from '@/components/user/notype/list'
+import NoticeTypeAdd from '@/components/user/notype/add'
+import NoticeTypeEdit from '@/components/user/notype/edit'
 
 // import SystemCity from '@/components/system/city/list'
 import SystemDict from '@/components/system/dict/list'
@@ -46,7 +51,11 @@ const routes = [
         path: '/',
         component: Main,
         children: [
-            {path: '/user/notice/list', component: StudentNotice, name: 'StudentNotice'},
+            {path: '/user/notype/add', component: NoticeTypeAdd, name: 'NoticeTypeAdd'},
+            {path: '/user/notype/edit', component: NoticeTypeEdit, name: 'NoticeTypeEdit'},
+            {path: '/user/notype/list', component: NoticeType, name: 'NoticeType'},
+            {path: '/user/notice/add', component: NoticeAdd, name: 'NoticeAdd'},
+            {path: '/user/notice/list', component: Notice, name: 'Notice'},
             {path: '/user/stuinfo/add', component: StudentUserAdd, name: 'StudentUserAdd'},
             {path: '/user/stuinfo/edit', component: StudentUserEdit, name: 'studentUserEdit'},
             {path: '/user/stuinfo/list', component: StudentUser, name: 'studentUser'},
