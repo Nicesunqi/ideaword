@@ -34,4 +34,6 @@ public class StudentUserDao extends BaseDao<StudentUser>{
        page = find(page,dc);
        return page;
     }
+
+
 }

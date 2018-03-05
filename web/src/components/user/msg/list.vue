@@ -10,7 +10,7 @@
             </el-col>
             <el-col :span="8">
                 <div class="layout-page-heading-action">
-                    <el-button v-permission="'permission:studentUser:add'" type="primary" onclick="router.push('add')"><i
+                    <el-button v-permission="'permission:message:add'" type="primary" onclick="router.push('add')"><i
                             class="fa fa-plus"></i>添加
                     </el-button>
                 </div>
@@ -28,27 +28,27 @@
         </div>
         <div class="layout-page-box">
             <el-table
-                    :data="notices"
+                    :data="messages"
                     border
                     style="width: 100%">
                 <el-table-column
-                        prop="title"
-                        label="标题"
-                        width="100">
-                </el-table-column>
-                <el-table-column
-                        prop="notype"
-                        label="公告类型"
-                        width="100">
-                </el-table-column>
-                <el-table-column
                         prop="content"
-                        label="公告"
-                        width="600">
+                        label="留言"
+                        min-width="500">
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="留言人"
+                        width="100">
+                </el-table-column>
+                <el-table-column
+                        prop="comment_size"
+                        label="评价人数"
+                        width="100">
                 </el-table-column>
                 <el-table-column
                         prop="create_date"
-                        label="创建时间"
+                        label="留言时间"
                         width="180">
                 </el-table-column>
                 <el-table-column
@@ -58,8 +58,8 @@
                         min-width="130px">
                     <template scope="scope">
                         <el-button-group>
-                            <el-button v-permission="'permission:notice:edit'" @click="edit(scope.row)" type="primary" size="small"><i class="fa fa-edit"></i>查看</el-button>
-                            <el-button v-permission="'permission:notice:del'" @click="del(scope.row)" size="small"><i class="fa fa-remove"></i>删除</el-button>
+                            <el-button v-permission="'permission:message:edit'" @click="edit(scope.row)" type="primary" size="small"><i class="fa fa-edit"></i>查看</el-button>
+                            <el-button v-permission="'permission:message:del'" @click="del(scope.row)" size="small"><i class="fa fa-remove"></i>删除</el-button>
                         </el-button-group>
                     </template>
                 </el-table-column>
@@ -95,12 +95,12 @@
                         total: 0
                     },
                 },
-                notices: []
+                messages: []
             }
         },
         methods: {
             edit(row){
-                router.push({name: 'NoticeEdit', query: {id: row.id}})
+                router.push({name: 'MessageEdit', query: {id: row.id}})
             },
             del(row){
                 this.$confirm('此操作将删除用户, 是否继续?', '提示', {
@@ -108,7 +108,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    api.request('admin/impl/notice/delete', {id: row.id}, (res)=> {
+                    api.request('admin/impl/message/delete', {id: row.id}, (res)=> {
                         _g.toast('success', '删除成功!')
                         this.init()
                     })
@@ -120,14 +120,14 @@
                     path:this.$route.path,
                     query:{title:this.filters.column.title}
                 });
-                api.request("admin/impl/notice/list", this.$route.query, (res) => {
-                    this.notices = res.data.notices;
+                api.request("admin/impl/message/list", this.$route.query, (res) => {
+                    this.messages = res.data.messages;
                     this.filters.pagination.total = parseInt(res.data.total)
                 })
             },
             init() {
-                api.request("admin/impl/notice/list", {}, (res) => {
-                    this.notices = res.data.notices;
+                api.request("admin/impl/message/list", {}, (res) => {
+                    this.messages = res.data.messages;
                     this.filters.pagination.total = parseInt(res.data.total)
                 })
             }

@@ -28,9 +28,9 @@ import './assets/css/common.css';
 
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL = 'http://localhost:8880/';
+// axios.defaults.baseURL = 'http://localhost:8880/';
 // axios.defaults.baseURL = 'http://qinshi-admin.lianxiba.cn/';
-// axios.defaults.baseURL = 'http://175.11.111.185:7078/';
+axios.defaults.baseURL = 'http://220.168.63.96:7078/';
 axios.defaults.timeout = 1000 * 60;
 //axios.defaults.headers.token = Lockr.get('token');
 axios.defaults.headers.token = sessionStorage.token;

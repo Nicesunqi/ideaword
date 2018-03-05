@@ -14,8 +14,12 @@ import SystemOffice from '@/components/system/office/list'
 import StudentUser from '@/components/user/stuinfo/list'
 import StudentUserEdit from '@/components/user/stuinfo/edit'
 import StudentUserAdd from '@/components/user/stuinfo/add'
+
+import Message from '@/components/user/msg/list'
+
 import Notice from '@/components/user/notice/list'
 import NoticeAdd from '@/components/user/notice/add'
+import NoticeEdit from '@/components/user/notice/edit'
 
 import NoticeType from '@/components/user/notype/list'
 import NoticeTypeAdd from '@/components/user/notype/add'
@@ -51,9 +55,11 @@ const routes = [
         path: '/',
         component: Main,
         children: [
+            {path: '/user/msg/list', component: Message, name: 'Message'},
             {path: '/user/notype/add', component: NoticeTypeAdd, name: 'NoticeTypeAdd'},
             {path: '/user/notype/edit', component: NoticeTypeEdit, name: 'NoticeTypeEdit'},
             {path: '/user/notype/list', component: NoticeType, name: 'NoticeType'},
+            {path: '/user/notice/edit', component: NoticeEdit, name: 'NoticeEdit'},
             {path: '/user/notice/add', component: NoticeAdd, name: 'NoticeAdd'},
             {path: '/user/notice/list', component: Notice, name: 'Notice'},
             {path: '/user/stuinfo/add', component: StudentUserAdd, name: 'StudentUserAdd'},

@@ -23,6 +23,8 @@ public class NoticeTypeService extends BaseService{
        return dao.get(id);
     }
 
+
+
     public Page<NoticeType> findNoticeTypeList(Page<NoticeType> page, NoticeType type) {
         page = dao.findNoticeTypeList(page,type);
         return page;

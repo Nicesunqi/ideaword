@@ -51,6 +51,7 @@
         data() {
             return {
                 notice: {
+                    id:"",
                     title: "",
                     content: "",
                     notype: "",
@@ -69,6 +70,7 @@
         methods: {
             save() {
                 var data = {
+                    id:this.notice.id,
                     title: this.notice.title,
                     noticeType:this.notice.notype,
                     content:this.notice.content
@@ -93,11 +95,23 @@
                     this.domain = res.data.domain;
                     console.log(this.postData.token)
                 })
-            }
+            },
+            init(){
+                if(!this.$route.query.id){
+                    return;
+                }
+                api.request("admin/impl/notice/list", {}, (res) => {
+                    this.notice.id  = res.data.notices[0].id;
+                    this.notice.title = res.data.notices[0].title;
+                    this.notice.content = res.data.notices[0].content;
+                    this.notice.notype = res.data.notices[0].notice_id;
+                })
+            },
         },
         created() {
             this.loadNoticeType();
             this.initToken();
+            this.init();
         }
 
     }

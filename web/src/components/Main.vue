@@ -23,6 +23,7 @@
                         <el-menu-item index="/user/stuinfo/list" v-permission="'permission:studentUser'">学生管理</el-menu-item>
                         <el-menu-item index="/user/notype/list" v-permission="'permission:noticeType'">公告类型</el-menu-item>
                         <el-menu-item index="/user/notice/list" v-permission="'permission:notice'">通知公告</el-menu-item>
+                        <el-menu-item index="/user/msg/list" v-permission="'permission:message'">留言管理</el-menu-item>
                     </div>
                 </el-submenu>
                 <el-submenu index="/system" v-permission="'permission'">

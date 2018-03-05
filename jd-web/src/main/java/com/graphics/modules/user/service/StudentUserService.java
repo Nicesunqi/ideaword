@@ -30,6 +30,10 @@ public class StudentUserService extends BaseService{
         return userDao.get(id);
     }
 
+    public StudentUser getUserByStuNo(String stuno) {
+        return userDao.findUserByStuNo(stuno);
+    }
+
     public StudentUser findUserByStuNo(String stuNo, HttpServletRequest request) {
         StudentUser user =  userDao.findUserByStuNo(stuNo);
         if(user == null){

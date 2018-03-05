@@ -9,6 +9,8 @@ import com.graphics.common.web.BaseController;
 import com.graphics.modules.notice.entity.Notice;
 import com.graphics.modules.notice.entity.Notice;
 import com.graphics.modules.notice.service.NoticeService;
+import com.graphics.modules.notice.service.NoticeTypeService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +27,8 @@ public class NoticeController extends BaseController{
 
     @Autowired
     private NoticeService service;
+    @Autowired
+    private NoticeTypeService typeService;
 
     @ModelAttribute
     public Notice get(@RequestParam(required = false) String id) {
@@ -52,16 +56,36 @@ public class NoticeController extends BaseController{
         List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < page.getList().size(); i++) {
             Notice no = page.getList().get(i);
+            String noticeType = typeService.get(no.getNoticeType()).getName();
+            String noticeId = typeService.get(no.getNoticeType()).getId();
             Object obj = new DynamicBean.Builder()
                     .setPV("id",no.getId())
                     .setPV("title",no.getTitle())
+                    .setPV("notype",noticeType)
+                    .setPV("noticeId",noticeId)
+                    .setPV("content",no.getContent())
                     .setPV("createDate",no.getCreateDate())
                     .build().getObject();
             list.add(obj);
         }
         Object obj = new DynamicBean.Builder().setPV("total",page.getList().size())
-                .setPV("Notice",list).build().getObject();
+                .setPV("notices",list).build().getObject();
         return apiReturn(1, ApiCode.SUCCESS,obj);
     }
 
+    @RequiresPermissions("permission:notice:add")
+    @RequestMapping(value = "/add")
+    public ApiData<Object>add(Notice notice){
+        service.add(notice);
+        ApiData<Object> apiData = apiReturn(1, ApiCode.SUCCESS, null);
+        return apiData;
+    }
+
+    @RequiresPermissions("permission:notice:del")
+    @RequestMapping(value = "/delete")
+    public ApiData<Object>delete(String id){
+        service.deleteDataById(id);
+        ApiData<Object> apiData = apiReturn(1, ApiCode.SUCCESS, null);
+        return apiData;
+    }
 }

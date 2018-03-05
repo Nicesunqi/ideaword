@@ -22,4 +22,14 @@ public class NoticeService extends BaseService {
     public Page<Notice> findNoticeList(Page<Notice> page, Notice notice) {
         return noticeDao.findNoticeList(page, notice);
     }
+
+    @Transactional(readOnly = false)
+    public void add(Notice notice) {
+        noticeDao.save(notice);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteDataById(String id) {
+        noticeDao.deleteById(id);
+    }
 }

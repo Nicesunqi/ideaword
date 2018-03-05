@@ -183,7 +183,6 @@
                 })
             },
             handleAvatarSuccess(res, file) {
-                debugger;
                 this.student.picture =res.key;
                 console.log("image:"+this.imageUrl);
             },
